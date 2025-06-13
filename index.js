@@ -55,15 +55,24 @@ export function transformHtml(subFilePath) {
 }
 
 export default function htmlTransfromPlugin() {
+  let config;
+
   return {
     name: 'vite-plugin-html-transform',
+
+    configResolved(resolvedConfig) {
+      config = resolvedConfig;
+    },
 
     closeBundle(err) {
       if (err) {
         console.log(err);
         return;
       }
-      const distDir = path.resolve(process.cwd(), 'dist');
+      const distDir = path.resolve(
+        config?.inlineConfig?.root || config?.root || process.cwd(),
+        config?.inlineConfig?.build.outDir || config?.build.outDir || 'dist'
+      );
       for (let subFile of fs.readdirSync(distDir)) {
         const subFilePath = path.resolve(distDir, subFile);
         const stat = fs.statSync(subFilePath);
