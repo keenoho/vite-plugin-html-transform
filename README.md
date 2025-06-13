@@ -1,17 +1,17 @@
-# vite-plugin-move-html-resource
+# vite-plugin-html-transform
 
 ## usage
 
 vite.config.js
 
 ```
-import moveHtmlResourcePlugin from './move-html-resource-plugin';
+import htmlTransfromPlugin from './vite-plugin-html-transform';
 
 export default {
     ...other config
 
     plugins: [
-      moveHtmlResourcePlugin(),
+      htmlTransfromPlugin(),
       ...other plugin
     ],
 
