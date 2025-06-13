@@ -29,7 +29,11 @@ export function transformHtml(subFilePath) {
       continue;
     }
     if (isInHead) {
-      if (/^\s+<(link|script)/.test(line) && /(rel|src|type)=\".*\"/.test(line)) {
+      const isTargetLine =
+        (/^\s+<link/.test(line) && /rel=\"stylesheet\".*crossorigin.*href=\".*\".*>/.test(line)) || // css
+        (/^\s+<script/.test(line) && /type=\"module\".*crossorigin.*src=\".*\".*>/.test(line)) || // js
+        (/^\s+<script/.test(line) && /type=\"module\".*>/.test(line)); // js
+      if (isTargetLine) {
         injectResources.push(line);
         htmlContentSplits.splice(i, 1);
         i--;
@@ -67,7 +71,6 @@ export default function htmlTransfromPlugin() {
           transformHtml(subFilePath);
         }
       }
-      // console.log(bundle);
     },
   };
 }
