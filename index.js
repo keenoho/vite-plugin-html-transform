@@ -54,7 +54,7 @@ export function transformHtml(subFilePath) {
   fs.writeFileSync(subFilePath, newHtmlContent, 'utf-8');
 }
 
-export default function htmlTransfromPlugin() {
+export default function htmlTransfromPlugin(options) {
   let config;
 
   return {
@@ -69,10 +69,12 @@ export default function htmlTransfromPlugin() {
         console.log(err);
         return;
       }
-      const distDir = path.resolve(
-        config?.inlineConfig?.root || config?.root || process.cwd(),
-        config?.inlineConfig?.build.outDir || config?.build.outDir || 'dist'
-      );
+
+      let { root, outDir } = options || {};
+      root = root || config?.inlineConfig?.root || config?.root || process.cwd();
+      outDir = config?.inlineConfig?.build.outDir || config?.build.outDir || 'dist';
+      const distDir = path.resolve(root, outDir);
+
       for (let subFile of fs.readdirSync(distDir)) {
         const subFilePath = path.resolve(distDir, subFile);
         const stat = fs.statSync(subFilePath);
